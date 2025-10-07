@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0d0d0f; /* softer dark background */
+    color: #fefefe; /* white text */
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  header {
+    padding: 40px 20px 20px;
+  }
+
+  header img {
+    width: 180px;
+    height: 180px;
+    max-width: 60vw;
+    border-radius: 50%;
+    border: 4px solid #4441b9; /* main blue border */
+    object-fit: cover;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin: 10px 0;
+    color: #4441b9; /* strong blue headline */
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin-bottom: 30px;
+    color: #b0b0b0; /* softer gray to balance */
+  }
+
+  section {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .project-card {
+    background: #1a1a1f;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #2a2a35;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+    border-color: #3b91e2; /* azure accent on hover */
+  }
+
+  .project-card a {
+    color: #3b91e2; /* Azure */
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  footer {
+    padding: 20px;
+    font-size: 0.9em;
+    color: #888;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #ff7a00; /* orange primary button */
+    border: none;
+    border-radius: 6px;
+    color: #fefefe;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: #3b91e2; /* azure hover for contrast */
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1rem; }
+    header img { width: 140px; height: 140px; }
+  }
+  @media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 0.9rem; }
+    header img { width: 120px; height: 120px; }
+    .projects { grid-template-columns: 1fr; }
+  }
+</style>
+
+</head>
+<body>
+  <header>
+    <!-- My profile photo -->
+    <img id="profile-photo" alt="My Profile Photo">
+    <h1>Hi, I'm James</h1>
+    <h2>Engineer, Maker & Part-time coder</h2>
+  </header>
+
+  <section>
+    <h2>My Projects</h2>
+    <div class="projects" id="project-list">
+      <!-- Static projects -->
+      <div class="project-card">
+        <p>Global Routing Vizualization</p>
+        <a href="https://jcza2ai.github.io/JCZA/globalrouting/index.html">View Project</a>
+      </div>
+      <div class="project-card">
+        <p>Project Two</p>
+        <a href="#">Coming Soon</a>
+      </div>
+    </div>
+    <button onclick="sendLike()">Send me a like</button>
+  </section>
+
+  <footer>
+    &copy; <span id="year"></span> JCZA. All rights reserved.
+  </footer>
+
+  <script>
+    // Redirect to profile page 
+    const REDIRECT_URL = "https://linkpro.cz/p32yXo5";
+
+    // Base64 encoded URLs
+    const profilePhotoB64 = "aHR0cHM6Ly9jZG4ub3BweW8uY29tL3VwbG9hZHMvYnVzaW5lc3MvMDhhZTkxNWNjNGY5MTFlZS9saWJyYXJ5LzE3NTk4NTM2NDZzVnlDaXJ2d3FrLmpwZw==";
+    const profilePhotoURL = atob(profilePhotoB64); // decode Base64 to string
+
+    // Set the decoded URL as the profile photo source
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("profile-photo").src = profilePhotoURL;
+    });
+
+
+    function sendLike() {
+      alert("Thanks for visiting my page!");
+
+      // Redirect to the new URL to record a like
+      window.location.href = REDIRECT_URL;
+    }
+
+      // Dynamic copyright year
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+  </script>
+
+</body>
+</html>
