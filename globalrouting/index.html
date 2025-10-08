@@ -988,7 +988,7 @@
             createCityLabels();
         }
 
-        // Create arc between two coordinates
+        // Create arc between two coordinates (uses TubeGeometry for consistent thickness)
         function createArc(startCoords, endCoords, colorHex, thickness) {
             const startVec = latLonToVector3(startCoords.lat, startCoords.lon, GLOBE_RADIUS);
             const endVec = latLonToVector3(endCoords.lat, endCoords.lon, GLOBE_RADIUS);
@@ -1005,20 +1005,22 @@
             }
 
             const curve = new THREE.QuadraticBezierCurve3(startVec, controlPoint, endVec);
-            const points = curve.getPoints(50);
-            const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-            // Convert hex color to THREE.js color
-            const color = new THREE.Color(colorHex);
+            // ✅ Use TubeGeometry instead of line
+            const tubeRadius = 0.01 * thickness; // Adjust this factor to scale visual thickness
+            const tubularSegments = 64;
+            const radialSegments = 8;
+            const closed = false;
 
-            const material = new THREE.LineBasicMaterial({
-                color: color,
-                linewidth: thickness,
+            const geometry = new THREE.TubeGeometry(curve, tubularSegments, tubeRadius, radialSegments, closed);
+            const material = new THREE.MeshBasicMaterial({
+                color: colorHex,
                 transparent: true,
                 opacity: 0.85
             });
-            const arcLine = new THREE.Line(geometry, material);
-            group.add(arcLine);
+
+            const tube = new THREE.Mesh(geometry, material);
+            group.add(tube);
         }
 
         // Create upward arc for origin-only cities
