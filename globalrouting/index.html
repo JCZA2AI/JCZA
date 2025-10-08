@@ -1027,8 +1027,8 @@
         function createUpwardArc(startCoords, colorHex, thickness) {
             const startVec = latLonToVector3(startCoords.lat, startCoords.lon, GLOBE_RADIUS);
 
-            // Create an upward arc that extends into space
-            const upwardHeight = GLOBE_RADIUS * 1.1; // Extends to 1.8x globe radius
+            // Create an upward arc that extends into space 0.3 to 2.0
+            const upwardHeight = GLOBE_RADIUS * 0.4; // Extends to 1.8x globe radius
             const endVec = startVec.clone().normalize().multiplyScalar(upwardHeight);
 
             // Create a control point that's slightly offset for a gentle curve
@@ -1076,10 +1076,15 @@
 
             routes.forEach(route => {
                 route.hops.forEach(hop => {
+                    // Check if this hop has only origins (no destinations) - these will have upward arcs
+                    const hasUpwardArc = hop.destinationCities.length === 0 && hop.originCities.length > 0;
+
                     // Create labels for origin cities with route color
                     hop.originCities.forEach(city => {
                         if (!labeledCities.has(city.id)) {
-                            const position = latLonToVector3(parseFloat(city.lat), parseFloat(city.lng), GLOBE_RADIUS + 0.3);
+                            // For origin-only cities with upward arcs, reduce the height offset for better readability 0.0 - 2.0
+                            const heightOffset = hasUpwardArc ? 0.5 : 0.3;
+                            const position = latLonToVector3(parseFloat(city.lat), parseFloat(city.lng), GLOBE_RADIUS + heightOffset);
                             const label = createTextSprite(city.city, route.color);
                             label.position.copy(position);
                             group.add(label);
