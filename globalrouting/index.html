@@ -1023,7 +1023,7 @@
             group.add(tube);
         }
 
-        // Create upward arc for origin-only cities
+        // Create upward arc for origin-only cities (uses TubeGeometry for consistent thickness)
         function createUpwardArc(startCoords, colorHex, thickness) {
             const startVec = latLonToVector3(startCoords.lat, startCoords.lon, GLOBE_RADIUS);
 
@@ -1037,20 +1037,22 @@
             const controlPoint = midPoint.clone().normalize().multiplyScalar(controlPointHeight);
 
             const curve = new THREE.QuadraticBezierCurve3(startVec, controlPoint, endVec);
-            const points = curve.getPoints(30); // Fewer points since it's a shorter arc
-            const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-            // Convert hex color to THREE.js color
-            const color = new THREE.Color(colorHex);
+            // ✅ Use TubeGeometry instead of line
+            const tubeRadius = 0.01 * thickness; // Adjust this factor to scale visual thickness
+            const tubularSegments = 30; // Fewer segments since it's a shorter arc
+            const radialSegments = 8;
+            const closed = false;
 
-            const material = new THREE.LineBasicMaterial({
-                color: color,
-                linewidth: thickness,
+            const geometry = new THREE.TubeGeometry(curve, tubularSegments, tubeRadius, radialSegments, closed);
+            const material = new THREE.MeshBasicMaterial({
+                color: colorHex,
                 transparent: true,
                 opacity: 0.85
             });
-            const arcLine = new THREE.Line(geometry, material);
-            group.add(arcLine);
+
+            const tube = new THREE.Mesh(geometry, material);
+            group.add(tube);
         }
 
         // Convert lat/lon to 3D vector
